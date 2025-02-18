@@ -9,3 +9,9 @@ This version comprises a Website running:
 - p5.js for interface;
 - p5.js.BLE for BLE connection with arduino MKR 1010 WiFi
 - RNBO web export for sensors processing and audio engine
+
+Be sure to use Google Chrome. It's not working on other browsers at the moment.
+
+For running a local version of the website, make sure to change your directory to "digiball_2.0_Demo_PEMS", and run an http server on terminal, such as
+
+```python3 -m http.server```
