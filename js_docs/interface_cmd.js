@@ -121,7 +121,7 @@ function interfaceInterativa() {
     }
 
     knobRangeDown.changeValue();
-    knobRangeDown.display(0, 14, knobRangeDownVals, 'tecitura ↓');
+    knobRangeDown.display(0, 14, knobRangeDownVals, 'tessitura ↓');
     knobRangeDown.mousehover();
 
     if (knobRangeDown.dragging && start) {
@@ -130,7 +130,7 @@ function interfaceInterativa() {
     }
 
     knobRangeUp.changeValue();
-    knobRangeUp.display(0, 13, knobRangeUpVals, 'tecitura ↑');
+    knobRangeUp.display(0, 13, knobRangeUpVals, 'tessitura ↑');
     knobRangeUp.mousehover();
 
     if (knobRangeUp.dragging && start) {
