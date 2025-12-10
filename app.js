@@ -98,6 +98,7 @@ function setup() {
 
     interfaceSetup();
     setupRNBO();
+    criarPresets();
 }
 
 // WINDOW — CANVAS
@@ -110,6 +111,7 @@ function canvasCreation() {
 function windowResized() {
     canvasCreation();
     interfaceSetup();
+    atualizarPosPresets();
 }
 
 function draw() {
@@ -125,8 +127,10 @@ function draw() {
         sim_Full()
 
         interfaceInterativa();
+
         presetsDisplay();
         presetsExect()
+        recordPresets();
 
         if (!maisInfoDisplay) {
             drone();
@@ -136,10 +140,10 @@ function draw() {
 
     } else {
         textAlign(CENTER);
-        textSize(38)
+        textSize(constrain(width / 20, 15, 38))
         fill(coresInterface.texto)
         text('D I G I B A L L  W E B . A P P', width / 2, height / 2 - 26);
-        textSize(24)
+        textSize(constrain(width / 20, 10, 24))
         text('CONECTAR & COMEÇAR', width / 2, height / 2 + 26);
     }
 

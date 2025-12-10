@@ -2,5 +2,9 @@
   {
     "id": "smpl",
     "file": "media/granular.mp3"
+  },
+  {
+    "id": "silence",
+    "file": "media/silence.mp3"
   }
 ]

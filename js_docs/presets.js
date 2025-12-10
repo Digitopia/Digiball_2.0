@@ -9,6 +9,7 @@ knobRangeUp.angle = ;
 
 escalaVal = ; */
 let preset = [];
+let simboloP = ['◐', '◒', '◑', '◓']
 
 class Preset {
     constructor(symb, x, y, scale, nota, offset, timbre, ataque, rDown, rUp) {
@@ -30,14 +31,32 @@ class Preset {
         this.size;
 
         this.changed = false;
+        this.ativo;
+        this.recorded = false;
     }
 
     display(cor, size) {
         this.size = size;
         textAlign(RIGHT);
-        fill(cor)
+
+        if (this.ativo) {
+            strokeWeight(4)
+            stroke(80, 50, 255, 200);
+            fill(cor)
+        } else if (this.recorded) {
+            strokeWeight(1)
+            stroke(cor);
+            fill(80, 50, 255, 150);
+        } else {
+            strokeWeight(1)
+            stroke(cor);
+            fill(cor, 50)
+        }
+
         textSize(size)
         text(this.symb, this.x, this.y)
+
+        strokeWeight(0)
     }
 
     run() {
@@ -49,23 +68,36 @@ class Preset {
                 knobOffset.angle = this.offset;
                 knobTimbreAtq.angle = this.timbre;
                 knobTimeAtq.angle = this.ataque;
-                knobRangeDown.angle = this.rDown;
-                knobRangeUp.angle = this.rUp;
+                faderRange.fmin_map = this.rDown;
+                faderRange.fmax_map = this.rUp;
 
                 this.changed = true;
+                console.log(this.ativo, this.changed)
             }
+
         }
 
     }
 }
 
-function presetsDisplay() {
+function criarPresets() {
     // constructor(symb, x, y, scale, nota, offset, timbre, ataque, rUp, rDown)
-    preset[0] = new Preset('◐', width - width / 22, height - 30, 0, -3.8, -1.6, -3.8, -3.8, 0.70, 1.4);
-    preset[1] = new Preset('◒', width - width / 22, height - 30 - tSize * 3, 0, 2.48, -3, -1.6, 3, 0.10, -1.4);
-    preset[2] = new Preset('◑', width - width / 22, height - 30 - tSize * 6, 3, -1.8, -1.5, 2.8, -1.8, -3.8, -2);
-    preset[3] = new Preset('◓', width - width / 22, height - 30 - tSize * 9, 4, -0.1, -3, 2.8, -3, -0.10, 0.65);
+    preset[0] = new Preset(simboloP[0], width - width / 22, height - 100, 0, -3.8, -1.6, -3.8, -3.8, 0, 7);
+    preset[0].ativo = true;
+    preset[1] = new Preset(simboloP[1], width - width / 22, height - 100 - tSize * 3, 0, 2.48, -3, -1.6, 3, -2, 7);
+    preset[2] = new Preset(simboloP[2], width - width / 22, height - 100 - tSize * 6, 3, -1.8, -1.5, 2.8, -1.8, -14, 5);
+    preset[3] = new Preset(simboloP[3], width - width / 22, height - 100 - tSize * 9, 4, -0.1, -3, 2.8, -3, -3, 13);
+}
 
+function atualizarPosPresets() {
+    for (let i = 0; i < preset.length; i++) {
+
+        preset[i].x = width - width / 22
+        preset[i].y = height - 100 - tSize * (i * 3)
+    }
+}
+
+function presetsDisplay() {
     for (let i = 0; i < preset.length; i++) {
         preset[i].display(coresInterface.texto, tSize * 3);
     }
@@ -75,9 +107,15 @@ function presetsExect() {
     for (let i = 0; i < preset.length; i++) {
         preset[i].run();
 
-
         if (preset[i].changed == true) {
             sendPresRNBO()
+            for (let j = 0; j < preset.length; j++) {
+                if (i != j)
+                    preset[j].ativo = false;
+                else
+                    preset[j].ativo = true;
+            }
+
             preset[i].changed = false;
         }
     }
@@ -100,10 +138,44 @@ function sendPresRNBO() {
     timeAtqSend.value = map(knobTimeAtq.writtenValue, 1, 10, 1, 1000);
 
     const rangeDownSend = device.parametersById.get("síntese/range_down");
-    rangeDownSend.value = knobRangeDown.writtenValue - 14;
+    rangeDownSend.value = faderRange.fmin_map;
+    faderRange.mappingvaluesPreset();
 
     const rangeUpSend = device.parametersById.get("síntese/range_up");
-    rangeUpSend.value = knobRangeUp.writtenValue + 1;
+    rangeUpSend.value = faderRange.fmax_map;
+    faderRange.mappingvaluesPreset();
+
+    console.log(faderRange.fmin_map, faderRange.fmax_map)
 }
 
+
+function recordPresets() {
+    textSize(tSize)
+    textAlign(RIGHT);
+    fill(coresInterface.texto)
+    let textoRec = 'gravar preset'
+    text(textoRec, width - width / 22, height - 30);
+
+    if (mouseY < height && mouseY > height - 30 * 1.5 && mouseX < width - width / 22 && mouseX > width - width / 22 - textWidth(textoRec) && start) {
+        cursor(HAND)
+        if (mouseIsPressed) {
+            for (let i = 0; i < preset.length; i++) {
+                if (preset[i].ativo) {
+                    preset[i].scale = escalaVal;
+
+                    preset[i].nota = knobNotas.writtenValue + 60;
+                    preset[i].offset = knobOffset.writtenValue - 12;
+                    preset[i].timbre = knobTimbreAtq.writtenValue * 0.1;
+                    preset[i].ataque = map(knobTimeAtq.writtenValue, 1, 10, 1, 1000);;
+
+                    preset[i].rDown = faderRange.fmin_map;
+                    preset[i].rUp = faderRange.fmax_map;
+
+                    preset[i].recorded = true
+                }
+            }
+        }
+    }
+
+}
 

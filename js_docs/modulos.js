@@ -22,9 +22,10 @@ function eventosOuts() {
         if (ev.tag === "out7") droneVals.res = ev.payload[0];
 
         if (ev.tag === "out9") {
-            // console.log(ev.payload)
             /* o x da representação visual da nota é relativo à altura da nota e o y tem uma aleatoriedade*/
             triggerVals.noteX = map(ev.payload[0], ev.payload[1], ev.payload[2], width / 8, width - width / 8);
+            console.log(ev.payload)
+
             triggerVals.tempY = height / 2 + random(-height / 5, height / 5)
         }
 

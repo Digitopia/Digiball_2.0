@@ -34,6 +34,10 @@ let knobRangeDownVals = ['-14', '-13', '-12', '-11', '-10', '-9', '-8', '-7', '-
 let knobRangeUp;
 let knobRangeUpVals = ['0', '+1', '+2', '+3', '+4', '+5', '+6', '+7', '+8', '+9', '+10', '+11', '+12', '+13'];
 
+let knobGran
+let knobGranVals = ['0', '1']
+
+let faderRange;
 
 
 //escalas
@@ -53,24 +57,24 @@ function interfaceSetup() {
     prevCounter = counter;
 
     tSize = constrain(width / 70, 12, 20);
+    let xpos = constrain(width / 22, 30, 100)
 
-    knobNotas = new Knob(constrain(width / 22, 30, 100), height - 50);
+    knobNotas = new Knob(xpos, height - 110);
     knobNotas.angle = -3.8;
 
-    knobOffset = new Knob(constrain(width / 22, 30, 100), height - 50 - constrain((tSize * 3.5), 60, height / 8))
+    knobOffset = new Knob(xpos, height - 110 - constrain((tSize * 3.5), 60, height / 8))
     knobOffset.angle = -1.6;
 
-    knobTimbreAtq = new Knob(constrain(width / 22, 30, 100), height - 50 - constrain((tSize * 3.5), 60, height / 8) * 2);
+    knobTimbreAtq = new Knob(xpos, height - 110 - constrain((tSize * 3.5), 60, height / 8) * 2);
     knobTimbreAtq.angle = -3.8;
 
-    knobTimeAtq = new Knob(constrain(width / 22, 30, 100), height - 50 - constrain((tSize * 3.5), 60, height / 8) * 3);
+    knobTimeAtq = new Knob(xpos, height - 110 - constrain((tSize * 3.5), 60, height / 8) * 3);
     knobTimeAtq.angle = -3.8;
 
-    knobRangeDown = new Knob(constrain(width / 22, 30, 100), height - 50 - constrain((tSize * 3.5), 60, height / 8) * 4);
-    knobRangeDown.angle = 0.7;
+    knobGran = new Knob(xpos, height - 110 - constrain((tSize * 3.5), 60, height / 8) * 4);
+    knobGran.angle = 0.7;
 
-    knobRangeUp = new Knob(constrain(width / 22, 30, 100), height - 50 - constrain((tSize * 3.5), 60, height / 8) * 5);
-    knobRangeUp.angle = -1.4;
+    faderRange = new Fader(xpos - xpos / 5, height - 45, constrain(width / 4, 50, 300))
 }
 
 
@@ -85,7 +89,7 @@ function interfaceInterativa() {
     */
 
     knobNotas.changeValue();
-    knobNotas.display(0, 11, knobNotasVals, 'fundamental');
+    knobNotas.display(0, knobNotasVals.length - 1, knobNotasVals, 'fundamental');
     knobNotas.mousehover();
 
     if (knobNotas.dragging && start) {
@@ -94,7 +98,7 @@ function interfaceInterativa() {
     }
 
     knobOffset.changeValue();
-    knobOffset.display(0, 24, knobOffsetVals, 'offset');
+    knobOffset.display(0, knobOffsetVals.length - 1, knobOffsetVals, 'offset');
     knobOffset.mousehover();
 
     if (knobOffset.dragging && start) {
@@ -103,7 +107,7 @@ function interfaceInterativa() {
     }
 
     knobTimbreAtq.changeValue();
-    knobTimbreAtq.display(0, 9, knobTimbreAtqVals, 'timbre');
+    knobTimbreAtq.display(0, knobTimbreAtqVals.length - 1, knobTimbreAtqVals, 'timbre');
     knobTimbreAtq.mousehover();
 
     if (knobTimbreAtq.dragging && start) {
@@ -112,7 +116,7 @@ function interfaceInterativa() {
     }
 
     knobTimeAtq.changeValue();
-    knobTimeAtq.display(0, 9, knobTimeAtqVals, 'ataque');
+    knobTimeAtq.display(0, knobTimeAtqVals.length - 1, knobTimeAtqVals, 'ataque');
     knobTimeAtq.mousehover();
 
     if (knobTimeAtq.dragging && start) {
@@ -120,22 +124,39 @@ function interfaceInterativa() {
         timeAtqSend.value = map(knobTimeAtq.writtenValue, 1, 10, 1, 1000);
     }
 
-    knobRangeDown.changeValue();
-    knobRangeDown.display(0, 14, knobRangeDownVals, 'tessitura ↓');
-    knobRangeDown.mousehover();
+    knobGran.changeValue();
+    knobGran.display(0, knobGranVals.length - 1, knobGranVals, 'granular');
+    knobGran.mousehover();
 
-    if (knobRangeDown.dragging && start) {
-        const rangeDownSend = device.parametersById.get("síntese/range_down");
-        rangeDownSend.value = knobRangeDown.writtenValue - 14;
+    if (knobGran.dragging && start) {
+        const granSend = device.parametersById.get("granularchange");
+        granSend.value = knobGran.writtenValue;
+        console.log(granSend.value);
     }
 
-    knobRangeUp.changeValue();
-    knobRangeUp.display(0, 13, knobRangeUpVals, 'tessitura ↑');
-    knobRangeUp.mousehover();
+    //     if (knobGran.dragging && start) {
+    //     const granSend = device.parametersById.get("granularchange");
+    //     granSend.value = granSend.value === 1 ? 0 : 1;
+    // }
 
-    if (knobRangeUp.dragging && start) {
+
+    /* Este fader está construído de forma a compilarno mousehoverCheck a mudança de cursor, 
+    a análise do mousePressed e o mapping de valores para fazer display e enviar */
+
+    faderRange.display();
+    faderRange.mousehoverCheck();
+
+    if (faderRange.fmin_dragging && start) {
+        console.log('send min range')
+
+        const rangeDownSend = device.parametersById.get("síntese/range_down");
+        rangeDownSend.value = faderRange.fmin_map;
+
+    } else if (faderRange.fmax_dragging && start) {
+        console.log('send max range')
+
         const rangeUpSend = device.parametersById.get("síntese/range_up");
-        rangeUpSend.value = knobRangeUp.writtenValue + 1;
+        rangeUpSend.value = faderRange.fmax_map;
     }
 
     /* esta função contém o display e mouse hove
@@ -144,7 +165,6 @@ function interfaceInterativa() {
 
     escalaDraw();
     drawBLE();
-
     maisInfo();
 }
 
@@ -154,8 +174,8 @@ function mousePressed() {
     knobOffset.mousecheck();
     knobTimbreAtq.mousecheck();
     knobTimeAtq.mousecheck();
-    knobRangeDown.mousecheck();
-    knobRangeUp.mousecheck();
+    knobGran.mousecheck();
+
 
 
     escalaMousecheck()
@@ -168,12 +188,11 @@ function mouseReleased() {
     knobOffset.dragging = false;
     knobTimbreAtq.dragging = false;
     knobTimeAtq.dragging = false;
-    knobRangeDown.dragging = false;
-    knobRangeUp.dragging = false;
+    knobGran.dragging = false;
 
     console.log(`escala: ${escalaVal}, nota: ${knobNotas.angle}, 
         offset: ${knobOffset.angle}, timbre: ${knobTimbreAtq.angle}, 
-        ataque: ${knobTimeAtq.angle}, range down: ${knobRangeDown.angle}, 
-        range up: ${knobRangeUp.angle}`)
+        ataque: ${knobTimeAtq.angle}, range down: ${faderRange.fmin_map}, 
+        range up: ${faderRange.fmax_map}`)
 }
 

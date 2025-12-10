@@ -95,6 +95,88 @@ class Knob {
         text(textoLegenda, this.x + this.r / 1.5, this.y + this.r / 2);
     }
 }
+/* --------------------------------- */
+/* ------ OBJETO FADER DUPLO  ------ */
+
+class Fader {
+
+    constructor(x, y, l) {
+        this.x = x;
+        this.y = y;
+        this.comprimento = l
+
+        this.fsize = constrain(this.comprimento / 20, 10, 20)
+
+        this.fmin_dragging = false;
+        this.fmax_dragging = false;
+
+        this.tessituraMax = 14
+        this.tessituraMin = -14
+        this.fmin_map = 0;
+        this.fmax_map = 7;
+
+        this.fmin_x = map(this.fmin_map, this.tessituraMin, this.tessituraMax, this.x, this.x + this.comprimento);
+        this.fmax_x = map(this.fmax_map, this.tessituraMin, this.tessituraMax, this.x, this.x + this.comprimento);
+    }
+
+    display() {
+        stroke(coresInterface.texto)
+        fill(coresInterface.texto)
+        strokeWeight(2);
+        line(this.x, this.y, this.x + this.comprimento, this.y);
+
+        strokeWeight(0);
+        rectMode(CENTER)
+        rect(this.fmin_x, this.y, this.fsize, this.fsize, 5);
+        rect(this.fmax_x, this.y, this.fsize, this.fsize, 5);
+
+        textAlign(LEFT)
+        text("tessitura", this.x, this.y + 20);
+
+        textAlign(RIGHT)
+        if (this.fmin_map > 0)
+            text('+' + this.fmin_map + ' → +' + this.fmax_map, this.x + this.comprimento, this.y + 20);
+        else if (this.fmax_map < 0)
+            text(this.fmin_map + ' → ' + this.fmax_map, this.x + this.comprimento, this.y + 20);
+        else
+            text(this.fmin_map + ' → +' + this.fmax_map, this.x + this.comprimento, this.y + 20);
+
+    }
+
+    mousehoverCheck() {
+        if (mouseX > this.fmin_x - this.fsize * 1.1 && mouseX < this.fmin_x * 1.1 + this.fsize && mouseY > this.y - this.fsize && mouseY < this.y + this.fsize) {
+            cursor(HAND)
+            if (mouseIsPressed && mouseX < this.fmax_x - this.fsize && mouseX > this.x) {
+                this.fmin_x = mouseX
+                this.mappingvaluesMouse();
+                this.fmin_dragging = true;
+            } else {
+                this.fmin_dragging = false;
+            }
+        }
+
+        if (mouseX > this.fmax_x - this.fsize * 1.1 && mouseX < this.fmax_x + this.fsize * 1.1 && mouseY > this.y - this.fsize && mouseY < this.y + this.fsize) {
+            cursor(HAND)
+            if (mouseIsPressed && mouseX > this.fmin_x + this.fsize && mouseX < this.x + this.comprimento) {
+                this.fmax_x = mouseX
+                this.mappingvaluesMouse();
+                this.fmax_dragging = true;
+            } else {
+                this.fmax_draggging = false;
+            }
+        }
+    }
+
+    mappingvaluesMouse() {
+        this.fmin_map = round(map(this.fmin_x, this.x, this.x + this.comprimento, this.tessituraMin, this.tessituraMax));
+        this.fmax_map = round(map(this.fmax_x, this.x, this.x + this.comprimento, this.tessituraMin, this.tessituraMax));
+    }
+
+    mappingvaluesPreset() {
+        this.fmin_x = map(this.fmin_map, this.tessituraMin, this.tessituraMax, this.x, this.x + this.comprimento);
+        this.fmax_x = map(this.fmax_map, this.tessituraMin, this.tessituraMax, this.x, this.x + this.comprimento);
+    }
+}
 
 /* ---------------------------- */
 /* ------ FUNÇÕES ESCALA ------ */
@@ -103,11 +185,12 @@ function escalaDraw() {
     textSize(tSize)
     textAlign(CENTER);
     fill(coresInterface.texto)
-    text('escala ' + escalaDisplay[escalaVal] + ' →', width / 2, height - 30);
+    let textoEscala = 'escala ' + escalaDisplay[escalaVal] + ' →'
+    text(textoEscala, width / 2, height - 30);
 
 
     // para alterar o cursor em hover
-    if (mouseY < height && mouseY > height - 30 * 1.5 && mouseX > width / 2 - width / 12 && mouseX < width / 2 + width / 12 && start)
+    if (mouseY < height && mouseY > height - 30 * 1.5 && mouseX > width / 2 - textWidth(textoEscala) / 2 && mouseX < width / 2 + textWidth(textoEscala) / 2 && start)
         cursor(HAND)
 }
 
@@ -119,16 +202,16 @@ function escalaMousecheck() {
     if (escalaVal < 0) escalaVal = escalaDisplay.length - 1;
 
 
-    //enviar a escala para o RNBO
-    //const escalaSend = device.parametersById.get("síntese/escala");
-    // escalaSend.value = escalaVal;
+    // enviar a escala para o RNBO
+    const escalaSend = device.parametersById.get("síntese/escala");
+    escalaSend.value = escalaVal;
 
-    device.messageEvent.subscribe((ev) => {
-        if (ev.tag === "out10") {
-            knobRangeUp.angle = map(ev.payload, 0, 13, -3.6, 0.7)
-            knobRangeDown.angle = 0.7;
-        }
-    });
+    // device.messageEvent.subscribe((ev) => {
+    //     if (ev.tag === "out10") {
+    //         faderRange.fmax_map = ev.payload
+    //         faderRange.fmin_map  = 0
+    //     }
+    // });
 }
 
 
@@ -137,7 +220,7 @@ function escalaMousecheck() {
 
 let maisInfoDisplay = false
 let textoinfo =
-    "texto textotextotextotextotextotexto textotext totextotextotextotextotexto xtotextotext.  xtotextotext. xtotextotextxtotextotext"
+    "A Digiball Web.App é a interface visual e interativa para o instrumento Digiball. Esta versão está atualmente em desenvolvimento.\n \n A Digiball é um instrumento universal que permite a qualquer pessoa produzir som através do movimento.  \nBasta conectarmos a Digiball a esta interface web através de BLE (bluetooth) – seguir os passos que aparacem no navegador – e usarmos a bola Digiball para a produção de som. \n\n A Digiball Web.App apresenta vários controlos que nos permitem alterar parâmetros sonoros e explorar diferentes escalas. \n Sempre que entramos no website encontramos quatro presets disponíveis e a possibilidade de os alterar momentânemante através do comando 'gravar preset'. \n\n\n Digitópia 2025"
 
 function maisInfo() {
     textAlign(LEFT);
@@ -151,19 +234,29 @@ function maisInfo() {
 
 
     if (maisInfoDisplay) {
-        textSize(tSize * 1.25)
         stroke(150, 150, 0, 220);
 
         rectMode(CENTER)
         strokeWeight(10)
 
         fill(coresInterface.infobackground, 200);
-        rect(width / 2, height / 2, width / 1.5, height / 1.5)
+        rect(width / 2, height / 2, constrain(width / 1.5, 200, 900), height / 1.5)
 
-        strokeWeight(3)
+        strokeWeight(2)
+        textSize(tSize)
         text('x', width / 36, height / 20 + tSize * 1.5)
         fill(coresInterface.infotexto)
-        text(textoinfo, width / 2, height / 2, width / 1.5 - tSize * 2, height / 1.5 - tSize * 2);
+
+        if (width > height)
+            textSize(constrain(tSize, 16, 18))
+        else if (height - width < 100)
+            textSize(constrain(tSize, 14, 18))
+        else {
+            textSize(constrain(tSize, 12, 18))
+        }
+
+        strokeWeight(1)
+        text(textoinfo, width / 2 + tSize, height / 2 + tSize, constrain(width / 1.5 - tSize * 2, 200, 900) - tSize, height / 1.5 - tSize * 2);
 
         blackwhite()
     } else {
@@ -188,6 +281,8 @@ function maisInfoBtn_mousehover() {
 function blackwhite() {
     textAlign(CENTER);
     textSize(tSize * 2)
+    strokeWeight(3)
+
     fill(50)
     text('☾', width / 2 - 25, height / 2 + (height / 1.5 - tSize * 2) / 2 - 25);
     // ellipse(width / 2 - 25, height / 2 + (height / 1.5 - tSize * 2) / 2 - 25, 20, 20);
