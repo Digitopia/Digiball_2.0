@@ -131,7 +131,7 @@ function interfaceInterativa() {
     if (knobGran.dragging && start) {
         const granSend = device.parametersById.get("granularchange");
         granSend.value = knobGran.writtenValue;
-        console.log(granSend.value);
+
     }
 
     //     if (knobGran.dragging && start) {

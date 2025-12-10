@@ -7,12 +7,14 @@ knobTimeAtq.angle = ;
 knobRangeDown.angle = ;
 knobRangeUp.angle = ;
 
-escalaVal = ; */
+escalaVal = ; 
+
+granval = */
 let preset = [];
 let simboloP = ['◐', '◒', '◑', '◓']
 
 class Preset {
-    constructor(symb, x, y, scale, nota, offset, timbre, ataque, rDown, rUp) {
+    constructor(symb, x, y, scale, nota, offset, timbre, ataque, rDown, rUp, granval) {
         this.symb = symb;
 
         this.x = x;
@@ -24,6 +26,7 @@ class Preset {
         this.offset = offset;
         this.timbre = timbre;
         this.ataque = ataque;
+        this.granval = granval;
 
         this.rDown = rDown;
         this.rUp = rUp;
@@ -70,6 +73,7 @@ class Preset {
                 knobTimeAtq.angle = this.ataque;
                 faderRange.fmin_map = this.rDown;
                 faderRange.fmax_map = this.rUp;
+                knobGran.angle = this.granval;
 
                 this.changed = true;
                 console.log(this.ativo, this.changed)
@@ -82,11 +86,11 @@ class Preset {
 
 function criarPresets() {
     // constructor(symb, x, y, scale, nota, offset, timbre, ataque, rUp, rDown)
-    preset[0] = new Preset(simboloP[0], width - width / 22, height - 100, 0, -3.8, -1.6, -3.8, -3.8, 0, 7);
+    preset[0] = new Preset(simboloP[0], width - width / 22, height - 100, 0, -3.8, -1.6, -3.8, -3.8, 0, 7, 0.7);
     preset[0].ativo = true;
-    preset[1] = new Preset(simboloP[1], width - width / 22, height - 100 - tSize * 3, 0, 2.48, -3, -1.6, 3, -2, 7);
-    preset[2] = new Preset(simboloP[2], width - width / 22, height - 100 - tSize * 6, 3, -1.8, -1.5, 2.8, -1.8, -14, 5);
-    preset[3] = new Preset(simboloP[3], width - width / 22, height - 100 - tSize * 9, 4, -0.1, -3, 2.8, -3, -3, 13);
+    preset[1] = new Preset(simboloP[1], width - width / 22, height - 100 - tSize * 3, 0, 2.48, -3, -1.6, 3, -2, 7, 0.7);
+    preset[2] = new Preset(simboloP[2], width - width / 22, height - 100 - tSize * 6, 3, -1.8, -1.5, 2.8, -1.8, -14, 5, 0.7);
+    preset[3] = new Preset(simboloP[3], width - width / 22, height - 100 - tSize * 9, 4, -0.1, -3, 2.8, -3, -3, 13, - 3.8);
 }
 
 function atualizarPosPresets() {
@@ -137,6 +141,9 @@ function sendPresRNBO() {
     const timeAtqSend = device.parametersById.get("síntese/time_ataque");
     timeAtqSend.value = map(knobTimeAtq.writtenValue, 1, 10, 1, 1000);
 
+    const granSend = device.parametersById.get("granularchange");
+    granSend.value = knobGran.writtenValue;
+
     const rangeDownSend = device.parametersById.get("síntese/range_down");
     rangeDownSend.value = faderRange.fmin_map;
     faderRange.mappingvaluesPreset();
@@ -163,10 +170,11 @@ function recordPresets() {
                 if (preset[i].ativo) {
                     preset[i].scale = escalaVal;
 
-                    preset[i].nota = knobNotas.writtenValue + 60;
-                    preset[i].offset = knobOffset.writtenValue - 12;
-                    preset[i].timbre = knobTimbreAtq.writtenValue * 0.1;
-                    preset[i].ataque = map(knobTimeAtq.writtenValue, 1, 10, 1, 1000);;
+                    preset[i].nota = knobNotas.angle;
+                    preset[i].offset = knobOffset.angle;
+                    preset[i].timbre = knobTimbreAtq.angle;
+                    preset[i].ataque = knobTimeAtq.angle;
+                    preset[i].granval = knobGran.angle;
 
                     preset[i].rDown = faderRange.fmin_map;
                     preset[i].rUp = faderRange.fmax_map;
