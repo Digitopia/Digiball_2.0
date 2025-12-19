@@ -180,7 +180,7 @@ function sim_Full() {
 }
 
 
-function touchMoved() {
+function touchStarted() {
     if (full_sim) {
 
         let mx = map(touch.x, 0, width, 10, 110);
