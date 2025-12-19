@@ -120,7 +120,7 @@ function drone() {
 
 let estado_drone = false;
 let d;
-let full_sim = false;
+let full_sim = true; //alterado temporáriamente para testar android. Voltar a colocar cm false
 
 /* PARA ATIVAR E DESATIVAR SIMULAÇÕES: CARREGAR TECLAS  */
 function keyPressed() {
