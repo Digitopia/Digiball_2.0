@@ -201,6 +201,10 @@ function touchStarted() {
     return false;
 }
 
+function touchMoved() {
+    return false; // Prevents scrolling WHILE dragging - crucial!
+}
+
 function touchEnded() {
     mouseReleased();
     return false;
