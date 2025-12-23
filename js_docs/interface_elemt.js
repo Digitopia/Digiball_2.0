@@ -247,13 +247,13 @@ function maisInfo() {
         text('x', width / 36, height / 20 + tSize * 1.5)
         fill(coresInterface.infotexto)
 
-        if (width > height)
-            textSize(constrain(tSize, 16, 18))
-        else if (height - width < 100)
-            textSize(constrain(tSize, 14, 18))
-        else {
-            textSize(constrain(tSize, 12, 18))
-        }
+        // if (width > height)
+        //     textSize(constrain(tSize, 16, 18))
+        // else if (height - width < 100)
+        //     textSize(constrain(tSize, 14, 18))
+        // else {
+        //     textSize(constrain(tSize, 12, 18))
+        // }
 
         strokeWeight(1)
         text(textoinfo, width / 2 + tSize, height / 2 + tSize, constrain(width / 1.5 - tSize * 2, 200, 900) - tSize, height / 1.5 - tSize * 2);
