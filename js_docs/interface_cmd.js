@@ -196,3 +196,12 @@ function mouseReleased() {
         range up: ${faderRange.fmax_map}`)
 }
 
+function touchStarted() {
+    mousePressed();
+    return false;
+}
+
+function touchEnded() {
+    mouseReleased();
+    return false;
+}
