@@ -196,16 +196,16 @@ function mouseReleased() {
         range up: ${faderRange.fmax_map}`)
 }
 
-function touchStarted() {
-    mousePressed();
-    return false;
-}
-
-// function touchMoved() {
-//     return false; // Prevents scrolling WHILE dragging - crucial!
+// function touchStarted() {
+//     mousePressed();
+//     return false;
 // }
 
-function touchEnded() {
-    mouseReleased();
-    return false;
-}
+// // function touchMoved() {
+// //     return false; // Prevents scrolling WHILE dragging - crucial!
+// // }
+
+// function touchEnded() {
+//     mouseReleased();
+//     return false;
+// }
