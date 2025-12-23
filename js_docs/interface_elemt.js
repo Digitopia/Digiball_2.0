@@ -256,6 +256,7 @@ function maisInfo() {
         // }
 
         strokeWeight(1)
+        textSize(constrain(sqrt(width * height) / 80, 10, 20))
         text(textoinfo, width / 2 + tSize, height / 2 + tSize, constrain(width / 1.5 - tSize * 2, 200, 900) - tSize, height / 1.5 - tSize * 2);
 
         blackwhite()

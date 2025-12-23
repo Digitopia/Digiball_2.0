@@ -56,7 +56,7 @@ function interfaceSetup() {
     counter = millis();
     prevCounter = counter;
 
-    tSize = constrain(sqrt(width * height) / 70, 10, 20);
+    tSize = constrain(width / 70, 12, 20);
     let xpos = constrain(width / 22, 30, 100)
 
     knobNotas = new Knob(xpos, height - 110);
@@ -199,6 +199,8 @@ function mouseReleased() {
 function touchStarted() {
     mousePressed();
 }
+
+
 
 function touchEnded() {
     mouseReleased()
