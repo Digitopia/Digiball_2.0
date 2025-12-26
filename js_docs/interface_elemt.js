@@ -221,7 +221,7 @@ function escalaMousecheck() {
 let maisInfoDisplay = false
 let textoinfo =
     "A Digiball Web.App é a interface visual e interativa para o instrumento Digiball. Esta versão está atualmente em desenvolvimento.\n \n A Digiball é um instrumento universal que permite a qualquer pessoa produzir som através do movimento.  \nBasta conectarmos a Digiball a esta interface web através de BLE (bluetooth) – seguir os passos que aparacem no navegador – e usarmos a bola Digiball para a produção de som. \n\n A Digiball Web.App apresenta vários controlos que nos permitem alterar parâmetros sonoros e explorar diferentes escalas. \n Sempre que entramos no website encontramos quatro presets disponíveis e a possibilidade de os alterar momentânemante através do comando 'gravar preset'. \n\n\n Digitópia 2025"
-let textoinfosize, larguraInfo, alturaInfo
+let textoinfosize, larguraInfo, alturaInfo, alturaRect
 
 function calcularAlturaTexto(texto, larguraMaxima, tamanhoTexto) {
     // Configurar texto com os mesmos parâmetros
@@ -294,7 +294,9 @@ function maisInfo() {
         strokeWeight(10)
 
         fill(coresInterface.infobackground, 200);
-        rect(width / 2, height / 2, larguraInfo + larguraInfo / 15, constrain(alturaInfo + alturaInfo / 2, alturaInfo, height * 0.9))
+
+        alturaRect = constrain(alturaInfo + alturaInfo / 2, alturaInfo, height * 0.9)
+        rect(width / 2, height / 2, larguraInfo + larguraInfo / 15, alturaRect)
 
         strokeWeight(2)
         textSize(tSize)
@@ -312,7 +314,6 @@ function maisInfo() {
     }
 
 }
-
 
 
 function maisInfoBtn_mousechecked() {
@@ -333,15 +334,15 @@ function blackwhite() {
     strokeWeight(3)
 
     fill(50)
-    text('☾', width / 2 - 25, height / 2 + alturaInfo / 1.5);
+    text('☾', width / 2 - tSize * 2, height / 2 + alturaRect / 2 - tSize * 2);
     // ellipse(width / 2 - 25, height / 2 + (height / 1.5 - tSize * 2) / 2 - 25, 20, 20);
     fill(245)
     // ellipse(width / 2 + 25, height / 2 + (height / 1.5 - tSize * 2) / 2 - 25, 20, 20);
-    text('☀︎', width / 2 + 25, height / 2 + alturaInfo / 1.5);
+    text('☀︎', width / 2 + tSize * 2, height / 2 + alturaRect / 2 - tSize * 2);
 
-    if (mouseY > height / 2 + alturaInfo / 1.5 - tSize * 1.5 && mouseY < height / 2 + alturaInfo / 1.5 + tSize) {
+    if (mouseY > height / 2 + alturaRect / 2 - tSize * 2 - tSize * 1.5 && mouseY < height / 2 + alturaRect / 2 - tSize * 2 + tSize) {
         // modo claro
-        if (mouseX > width / 2 + 25 - 10 && mouseX < width / 2 + 25 + 10) {
+        if (mouseX > width / 2 + tSize * 2 - 10 && mouseX < width / 2 + tSize * 2 + 10) {
             cursor(HAND)
             if (mouseIsPressed) {
                 coresInterface.texto = 100
@@ -351,7 +352,7 @@ function blackwhite() {
             }
         }
         // modo escuro
-        if (mouseX > width / 2 - 25 - 10 && mouseX < width / 2 - 25 + 10) {
+        if (mouseX > width / 2 - tSize * 2 - 10 && mouseX < width / 2 - tSize * 2 + 10) {
             cursor(HAND)
             if (mouseIsPressed) {
                 coresInterface.texto = 180
