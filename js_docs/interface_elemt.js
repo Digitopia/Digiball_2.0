@@ -294,7 +294,7 @@ function maisInfo() {
         strokeWeight(10)
 
         fill(coresInterface.infobackground, 200);
-        rect(width / 2, height / 2, larguraInfo + larguraInfo / 15, alturaInfo + alturaInfo / 2)
+        rect(width / 2, height / 2, larguraInfo + larguraInfo / 15, constrain(alturaInfo + alturaInfo / 2, alturaInfo, height * 0.9))
 
         strokeWeight(2)
         textSize(tSize)
