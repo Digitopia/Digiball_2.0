@@ -184,6 +184,5 @@ function recordPresets() {
             }
         }
     }
-
 }
 

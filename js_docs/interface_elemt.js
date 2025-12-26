@@ -221,6 +221,56 @@ function escalaMousecheck() {
 let maisInfoDisplay = false
 let textoinfo =
     "A Digiball Web.App é a interface visual e interativa para o instrumento Digiball. Esta versão está atualmente em desenvolvimento.\n \n A Digiball é um instrumento universal que permite a qualquer pessoa produzir som através do movimento.  \nBasta conectarmos a Digiball a esta interface web através de BLE (bluetooth) – seguir os passos que aparacem no navegador – e usarmos a bola Digiball para a produção de som. \n\n A Digiball Web.App apresenta vários controlos que nos permitem alterar parâmetros sonoros e explorar diferentes escalas. \n Sempre que entramos no website encontramos quatro presets disponíveis e a possibilidade de os alterar momentânemante através do comando 'gravar preset'. \n\n\n Digitópia 2025"
+let textoinfosize, larguraInfo, alturaInfo
+
+function calcularAlturaTexto(texto, larguraMaxima, tamanhoTexto) {
+    // Configurar texto com os mesmos parâmetros
+    textSize(tamanhoTexto);
+
+    // Dividir o texto em parágrafos (quebras de linha explícitas)
+    let paragrafos = texto.split('\n');
+    let totalLinhas = 0;
+
+    // Para cada parágrafo, calcular quantas linhas vai ocupar
+    for (let paragrafo of paragrafos) {
+        if (paragrafo.trim() === '') {
+            // Parágrafo vazio = 1 linha
+            totalLinhas += 1;
+        } else {
+            // Calcular quantas linhas este parágrafo precisa
+            let palavras = paragrafo.split(' ');
+            let linhaAtual = '';
+            let linhasParaParagrafo = 0;
+
+            for (let palavra of palavras) {
+                let teste = linhaAtual + palavra + ' ';
+
+                // Se a linha ficar maior que a largura máxima
+                if (textWidth(teste) > larguraMaxima) {
+                    if (linhaAtual.trim() !== '') {
+                        linhasParaParagrafo++;
+                    }
+                    linhaAtual = palavra + ' ';
+                } else {
+                    linhaAtual = teste;
+                }
+            }
+
+            // Adicionar a última linha do parágrafo
+            if (linhaAtual.trim() !== '') {
+                linhasParaParagrafo++;
+            }
+
+            totalLinhas += linhasParaParagrafo;
+        }
+    }
+
+    // Calcular altura total
+    let alturaLinha = tamanhoTexto * 1.3;
+    let alturaTotal = totalLinhas * alturaLinha;
+
+    return alturaTotal;
+}
 
 function maisInfo() {
     textAlign(LEFT);
@@ -232,6 +282,10 @@ function maisInfo() {
     textSize(tSize)
     text('DIGIBALL WEB.APP', width / 36, height / 20)
 
+    textoinfosize = constrain(tSize, 12, 20)
+    larguraInfo = constrain(width / 1.5 - tSize * 2, 200, 900) - tSize
+    alturaInfo = calcularAlturaTexto(textoinfo, larguraInfo, textoinfosize);
+
 
     if (maisInfoDisplay) {
         stroke(150, 150, 0, 220);
@@ -240,24 +294,16 @@ function maisInfo() {
         strokeWeight(10)
 
         fill(coresInterface.infobackground, 200);
-        rect(width / 2, height / 2, constrain(width / 1.5, 200, 900), height / 1.5)
+        rect(width / 2, height / 2, larguraInfo + larguraInfo / 15, alturaInfo + alturaInfo / 2)
 
         strokeWeight(2)
         textSize(tSize)
         text('x', width / 36, height / 20 + tSize * 1.5)
         fill(coresInterface.infotexto)
 
-        // if (width > height)
-        //     textSize(constrain(tSize, 16, 18))
-        // else if (height - width < 100)
-        //     textSize(constrain(tSize, 14, 18))
-        // else {
-        //     textSize(constrain(tSize, 12, 18))
-        // }
-
         strokeWeight(1)
-        textSize(constrain(sqrt(width * height) / 80, 10, 20))
-        text(textoinfo, width / 2 + tSize, height / 2 + tSize, constrain(width / 1.5 - tSize * 2, 200, 900) - tSize, height / 1.5 - tSize * 2);
+        textSize(textoinfosize)
+        text(textoinfo, width / 2 + tSize / 2, height / 2 - alturaInfo / 2, larguraInfo);
 
         blackwhite()
     } else {
@@ -266,6 +312,8 @@ function maisInfo() {
     }
 
 }
+
+
 
 function maisInfoBtn_mousechecked() {
     if (mouseX < width / 36 + tSize && mouseX > width / 36 - tSize && mouseY < height / 20 + tSize * 2.5 && mouseY > height / 20 + tSize * 0.5)
@@ -285,13 +333,13 @@ function blackwhite() {
     strokeWeight(3)
 
     fill(50)
-    text('☾', width / 2 - 25, height / 2 + (height / 1.5 - tSize * 2) / 2 - 25);
+    text('☾', width / 2 - 25, height / 2 + alturaInfo / 1.5);
     // ellipse(width / 2 - 25, height / 2 + (height / 1.5 - tSize * 2) / 2 - 25, 20, 20);
     fill(245)
     // ellipse(width / 2 + 25, height / 2 + (height / 1.5 - tSize * 2) / 2 - 25, 20, 20);
-    text('☀︎', width / 2 + 25, height / 2 + (height / 1.5 - tSize * 2) / 2 - 25);
+    text('☀︎', width / 2 + 25, height / 2 + alturaInfo / 1.5);
 
-    if (mouseY > height / 2 + (height / 1.5 - tSize * 2) / 2 - 25 - tSize * 2 && mouseY < height / 2 + (height / 1.5 - tSize * 2) / 2 - 25) {
+    if (mouseY > height / 2 + alturaInfo / 1.5 - tSize * 1.5 && mouseY < height / 2 + alturaInfo / 1.5 + tSize) {
         // modo claro
         if (mouseX > width / 2 + 25 - 10 && mouseX < width / 2 + 25 + 10) {
             cursor(HAND)

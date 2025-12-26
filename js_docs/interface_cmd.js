@@ -56,7 +56,7 @@ function interfaceSetup() {
     counter = millis();
     prevCounter = counter;
 
-    tSize = constrain(width / 70, 12, 20);
+    tSize = constrain(sqrt(width * height) / 80, 9, 24);
     let xpos = constrain(width / 22, 30, 100)
 
     knobNotas = new Knob(xpos, height - 110);
