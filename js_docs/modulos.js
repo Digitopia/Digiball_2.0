@@ -120,7 +120,7 @@ function drone() {
 
 let estado_drone = false;
 let d;
-let full_sim = true; //alterar temporáriamente para true p testar android. Voltar a colocar cm false no fim 
+let full_sim = false; //alterar temporáriamente para true p testar android. Voltar a colocar cm false no fim 
 
 /* PARA ATIVAR E DESATIVAR SIMULAÇÕES: CARREGAR TECLAS  */
 function keyPressed() {
@@ -181,27 +181,27 @@ function sim_Full() {
 
 /* ATIVAR PARA SIMULAÇÃO ANDROID/TOUCH */
 
-function touchStarted() {
-    if (full_sim) {
+// function touchStarted() {
+//     if (full_sim) {
 
-        let mx = map(touch.x, 0, width, 10, 110);
-        let my = map(touch.y, 0, height, 10, 110);
+//         let mx = map(touch.x, 0, width, 10, 110);
+//         let my = map(touch.y, 0, height, 10, 110);
 
-        // este mapping de valores foi criado com tentativa e erro
-        const heading = map(mx, 0, 127, -180, 180)
-        const roll = map(mx, 0, 127, -180, 180)
-        const pitch = map(mx, 0, 127, 0, 360)
-        const x = map(mx, 0, 127, -0.1, 0)
-        const y = map(my, 0, 127, -0.1, 0)
-        const z = map(my, 0, 127, -0.1, 0)
+//         // este mapping de valores foi criado com tentativa e erro
+//         const heading = map(mx, 0, 127, -180, 180)
+//         const roll = map(mx, 0, 127, -180, 180)
+//         const pitch = map(mx, 0, 127, 0, 360)
+//         const x = map(mx, 0, 127, -0.1, 0)
+//         const y = map(my, 0, 127, -0.1, 0)
+//         const z = map(my, 0, 127, -0.1, 0)
 
 
-        //criado com base no que acontece no ficheiro bleConnect.js
-        let vars = [heading, roll, pitch, x, y, z];
+//         //criado com base no que acontece no ficheiro bleConnect.js
+//         let vars = [heading, roll, pitch, x, y, z];
 
-        let messageEvent = new RNBO.MessageEvent(RNBO.TimeNow, "in1", vars);
-        device.scheduleEvent(messageEvent);
-    }
-}
+//         let messageEvent = new RNBO.MessageEvent(RNBO.TimeNow, "in1", vars);
+//         device.scheduleEvent(messageEvent);
+//     }
+// }
 
 

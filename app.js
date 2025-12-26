@@ -87,6 +87,10 @@ function mouseClicked() {
     firstClick = true;
 }
 
+function touchStarted() {
+    setupRNBO();
+}
+
 
 function setup() {
     frameRate(60);
