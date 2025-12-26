@@ -157,7 +157,7 @@ function sendPresRNBO() {
 
 
 function recordPresets() {
-    textSize(tSize)
+    textSize(tSize * 0.9)
     textAlign(RIGHT);
     fill(coresInterface.texto)
     let textoRec = 'gravar preset'

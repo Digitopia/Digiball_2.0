@@ -182,7 +182,7 @@ class Fader {
 /* ------ FUNÇÕES ESCALA ------ */
 
 function escalaDraw() {
-    textSize(tSize)
+    textSize(tSize * 0.9)
     textAlign(CENTER);
     fill(coresInterface.texto)
     let textoEscala = 'escala ' + escalaDisplay[escalaVal] + ' →'
