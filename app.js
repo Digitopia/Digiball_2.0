@@ -81,7 +81,7 @@ const printParams = async () => {
 //Ativar o RNBO e BLE
 function mouseClicked() {
     if (!firstClick) {
-        connectToBle();
+        // connectToBle();
         context.resume()
     }
     firstClick = true;
@@ -94,7 +94,7 @@ function setup() {
     textFont('Courier Prime');
 
     // Create a p5ble class
-    myBLE = new p5ble();
+    // myBLE = new p5ble();
 
     interfaceSetup();
     setupRNBO();
