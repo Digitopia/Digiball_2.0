@@ -79,12 +79,23 @@ const printParams = async () => {
 };
 
 //Ativar o RNBO e BLE
-function mouseClicked() {
+async function mouseClicked() {
     if (!firstClick) {
         // connectToBle();
-        context.resume()
+        await setupRNBO();
+        await context.resume();
+        firstClick = true;
     }
-    firstClick = true;
+}
+
+async function touchStarted() {
+    if (!firstClick) {
+        connectToBle();
+        await setupRNBO();
+        await context.resume();
+        firstClick = true;
+    }
+    return false;
 }
 
 
@@ -94,10 +105,10 @@ function setup() {
     textFont('Courier Prime');
 
     // Create a p5ble class
-    // myBLE = new p5ble();
+    myBLE = new p5ble();
 
     interfaceSetup();
-    setupRNBO();
+
     criarPresets();
 }
 

@@ -170,30 +170,36 @@ function interfaceInterativa() {
 
 
 function mousePressed() {
-    knobNotas.mousecheck();
-    knobOffset.mousecheck();
-    knobTimbreAtq.mousecheck();
-    knobTimeAtq.mousecheck();
-    knobGran.mousecheck();
+    if (firstClick) {
+        knobNotas.mousecheck();
+        knobOffset.mousecheck();
+        knobTimbreAtq.mousecheck();
+        knobTimeAtq.mousecheck();
+        knobGran.mousecheck();
 
 
 
-    escalaMousecheck()
-    BLEMousecheck()
-    maisInfoBtn_mousechecked()
+        escalaMousecheck()
+        BLEMousecheck()
+        maisInfoBtn_mousechecked()
+    }
 }
 
-function mouseReleased() {
-    knobNotas.dragging = false;
-    knobOffset.dragging = false;
-    knobTimbreAtq.dragging = false;
-    knobTimeAtq.dragging = false;
-    knobGran.dragging = false;
 
-    console.log(`escala: ${escalaVal}, nota: ${knobNotas.angle}, 
+function mouseReleased() {
+    if (firstClick) {
+        knobNotas.dragging = false;
+        knobOffset.dragging = false;
+        knobTimbreAtq.dragging = false;
+        knobTimeAtq.dragging = false;
+        knobGran.dragging = false;
+
+        console.log(`escala: ${escalaVal}, nota: ${knobNotas.angle}, 
         offset: ${knobOffset.angle}, timbre: ${knobTimbreAtq.angle}, 
         ataque: ${knobTimeAtq.angle}, range down: ${faderRange.fmin_map}, 
         range up: ${faderRange.fmax_map}`)
+    }
+
 }
 
 function touchStarted() {
