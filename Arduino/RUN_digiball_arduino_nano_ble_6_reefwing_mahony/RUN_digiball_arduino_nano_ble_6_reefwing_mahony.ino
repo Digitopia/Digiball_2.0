@@ -11,9 +11,9 @@
 // values for hard and soft iron correction of the magnetometer 
 const float hard_iron[3] = { -30.13, 20.95, -20.51 };
 
-const float soft_iron[3][3]{ { 1.018, -0.000, 0.005 },
-                             { 0.000, 0.973, +0.003 },
-                             { 0.005, 0.003, 1.010 } };
+const float soft_iron[3][3]{ { 0.000, 0.000, 0.000 },
+                             { 0.000, 0.000, 0.000 },
+                             { 0.000, 0.000, 0.000 } };
 
 // values for the correction of the gyroscope and accelerometer
 const float gyro_offset[3] = { -0.2747, -0.1221, 0.0610 };

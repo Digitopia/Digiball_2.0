@@ -13,16 +13,10 @@ This version comprises a Website running:
 
 Be sure to use Google Chrome. It's not working on other browsers at the moment.
 
-For running a local version of the website, make sure to change your directory to "digiball_2.0_Demo_PEMS", and run an http server on terminal, such as
+To run the website, run an http server on terminal from this root folder, such as
 
 ```python3 -m http.server```
 
-```
-
-```
 
 
-
-Export your RNBO code into this directory.
-
-For the Arduino, there is the need to calibrate the magnetometer and gyroscope of the unit. The simpler way (which works for most cases) is to use the arduino sketches for the gyroscope calibration and manetometer hard iron calibration. The sketches will print calibration values than then you need to introduce in the RUN sketch, which should be loaded in the end. If you want to calibrate the soft iron component of the magnetometer, it is possible to use the respective sketch in articulation with MotionCal, which you can download [here](https://www.pjrc.com/store/prop_shield.html).
+The whole instructions for producing and running the instrument and website can be found in PRODUCTION_GUIDE.md.
